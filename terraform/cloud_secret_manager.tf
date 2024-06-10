@@ -18,25 +18,3 @@ resource "google_secret_manager_secret_version" "db_credentials_version" {
     "password" : random_password.password.result
   })
 }
-
-resource "kubernetes_secret" "db-username" {
-  metadata {
-    name      = "db-username"
-    namespace = "tms-app"
-  }
-
-  data = {
-    "password" = base64encode(var.db_username)
-  }
-}
-
-resource "kubernetes_secret" "db-password" {
-  metadata {
-    name      = "db-password"
-    namespace = "tms-app"
-  }
-
-  data = {
-    "password" = base64encode(random_password.password.result)
-  }
-}

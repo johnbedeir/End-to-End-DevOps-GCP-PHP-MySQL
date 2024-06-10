@@ -30,7 +30,7 @@ resource "google_container_node_pool" "primary_nodes" {
   name       = "${var.name_prefix}-${var.environment}-nodepool"
   location   = google_container_cluster.primary.location
   cluster    = google_container_cluster.primary.name
-  node_count = 1
+  node_count = 3
 
   autoscaling {
     min_node_count = 3
@@ -94,16 +94,4 @@ resource "helm_release" "cluster-autoscaler" {
     name  = "extraArgs.scale-down-unneeded-time"
     value = "5m"
   }
-}
-
-
-resource "kubernetes_manifest" "app_namespace" {
-  manifest = {
-    apiVersion = "v1"
-    kind       = "Namespace"
-    metadata = {
-      name = "tms-app"
-    }
-  }
-  depends_on = [google_container_cluster.primary]
 }

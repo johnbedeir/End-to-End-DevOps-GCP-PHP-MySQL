@@ -4,7 +4,6 @@ variable "argocd_values" {
     server:
       service:
         type: LoadBalancer
-    # Additional Argo CD configurations...
     EOF
 }
 
