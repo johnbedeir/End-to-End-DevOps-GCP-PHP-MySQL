@@ -27,7 +27,9 @@ dbsecretusername="db-username"
 cloudsql_endpoint="sql-endpoint"
 #  K8s
 app_namespace="tms-app"
-ingress_service_name="tms-ingress"
+ingress_namespace="ingress-nginx"
+ingress_service_name="ingress-nginx-controller"
+ingress_deployment="https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml"
 monitoring_namespace="monitoring"
 alertmanager_svc="kube-prometheus-stack-alertmanager"
 prometheus_svc="kube-prometheus-stack-prometheus"
@@ -69,7 +71,7 @@ gcloud iam service-accounts keys create terraform/${filename} --iam-account ${se
 # Build the infrastructure
 echo "--------------------Creating GKE--------------------"
 echo "--------------------Creating GCR--------------------"
-echo "--------------------Deploying Monitoring--------------------"
+echo "--------------------Deploying Monitoring------------"
 cd terraform && \ 
 terraform init 
 terraform apply -auto-approve
@@ -83,7 +85,11 @@ sleep 30s
 echo "--------------------Update Kubeconfig--------------------"
 gcloud container clusters get-credentials ${cluster_name} --zone ${zone} --project ${project_id}
 
-remove preious docker images
+# Deploy Ingress
+echo "--------------------Deploy Ingress--------------------"
+kubectl apply -f ${ingress_deployment}
+
+# remove preious docker images
 echo "--------------------Remove Previous build--------------------"
 docker rmi -f ${frontend_image_name} || true
 docker rmi -f ${users_image_name} || true
@@ -111,6 +117,7 @@ docker push ${sql_job_image_name}
 # create app_namespace
 echo "--------------------creating Namespace--------------------"
 kubectl create ns ${app_namespace} || true
+kubectl create ns ${ingress_namespace} || true
 
 # Store the generated password in k8s secrets
 echo "--------------------Store the generated password in k8s secret--------------------"
@@ -120,6 +127,7 @@ kubectl create secret generic ${dbsecretname} --from-literal=password=${db_gener
 
 # Deploy the application
 echo "--------------------Deploy App--------------------"
+kubectl apply -f k8s/ingress
 kubectl apply -n ${app_namespace} -f k8s/frontend-service
 kubectl apply -n ${app_namespace} -f k8s/logout-service
 kubectl apply -n ${app_namespace} -f k8s/users-service
@@ -132,7 +140,7 @@ sleep 90s
 echo ""
 echo "Cloud_SQL: " ${cloudsql_public_ip}
 echo ""
-echo "App_URL:" $(kubectl get ingress -n ${namespace} ${ingress_service_name} -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+echo "App_URL:" $(kubectl get svc -n ${ingress_namespace} ${ingress_service_name} -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo ""
 echo "Alertmanager_URL:" $(kubectl get svc ${alertmanager_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
