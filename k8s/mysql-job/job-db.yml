@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-db-tables
+  namespace: tms-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-init
+        image: gcr.io/johnydev/tms-mysql-job-img:latest
+        env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: sql-endpoint
+                key: endpoint
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-username
+                key: username
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: db-password
+                key: password
+          - name: DB_DATABASE
+            value: task_manager
+      restartPolicy: Never
+  backoffLimit: 4
