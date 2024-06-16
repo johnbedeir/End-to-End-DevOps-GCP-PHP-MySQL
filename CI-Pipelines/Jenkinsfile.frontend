@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${env.TAG}"
         GCP_PROJECT = "${env.GCP_PROJECT}"
         DOCKERFILE_PATH = "${env.APP_DOCKERFILE_PATH}"
-        ENV_CREDENTIAL_ID = "env-file-credentials"  // Set the credential ID for the .env file
+        ENV_CREDENTIAL_ID = "${env-file-credentials}" 
     }
 
     stages {
