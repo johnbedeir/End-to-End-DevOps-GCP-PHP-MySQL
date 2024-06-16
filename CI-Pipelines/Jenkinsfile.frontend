@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "${env.TAG}"
         GCP_PROJECT = "${env.GCP_PROJECT}"
         DOCKERFILE_PATH = "${env.APP_DOCKERFILE_PATH}"
-        ENV = "${env-file-credentials}"
+        ENV_CREDENTIAL_ID = "env-file-credentials"  // Set the credential ID for the .env file
     }
 
     stages {
@@ -19,8 +19,8 @@ pipeline {
         stage('Prepare Environment') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: env.ENV, variable: 'ENV_CONTENT')]) {
-                        writeFile file: '.env', text: ENV_CONTENT
+                    withCredentials([string(credentialsId: env.ENV_CREDENTIAL_ID, variable: 'ENV_CONTENT')]) {
+                        writeFile file: '.env', text: "${ENV_CONTENT}"
                     }
                 }
             }
@@ -44,6 +44,14 @@ pipeline {
         stage('Push Docker Image to GCR') {
             steps {
                 sh 'docker push $REPOSITORY_URI:$IMAGE_TAG'
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                sh 'docker rmi $REPOSITORY_URI:$IMAGE_TAG'
             }
         }
     }
