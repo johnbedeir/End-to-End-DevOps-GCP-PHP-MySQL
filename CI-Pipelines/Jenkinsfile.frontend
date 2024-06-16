@@ -21,8 +21,8 @@ pipeline {
                 script {
                     try {
                         echo "Preparing environment by writing .env file"
-                        withCredentials([string(credentialsId: env.ENV_CREDENTIAL_ID, variable: 'ENV_CONTENT')]) {
-                            writeFile file: '.env', text: "${ENV_CONTENT}"
+                        withCredentials([file(credentialsId: env.ENV_CREDENTIAL_ID, variable: 'ENV_FILE')]) {
+                            sh 'cp $ENV_FILE task-management-system/.env'
                         }
                         echo "Environment prepared successfully."
                     } catch (Exception e) {
