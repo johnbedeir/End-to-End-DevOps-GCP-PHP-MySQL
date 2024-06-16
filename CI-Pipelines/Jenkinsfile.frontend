@@ -19,8 +19,15 @@ pipeline {
         stage('Prepare Environment') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: env.ENV_CREDENTIAL_ID, variable: 'ENV_CONTENT')]) {
-                        writeFile file: '.env', text: "${ENV_CONTENT}"
+                    try {
+                        echo "Preparing environment by writing .env file"
+                        withCredentials([string(credentialsId: env.ENV_CREDENTIAL_ID, variable: 'ENV_CONTENT')]) {
+                            writeFile file: '.env', text: "${ENV_CONTENT}"
+                        }
+                        echo "Environment prepared successfully."
+                    } catch (Exception e) {
+                        echo "Error during 'Prepare Environment' stage: ${e.getMessage()}"
+                        throw e
                     }
                 }
             }
