@@ -47,12 +47,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            script {
-                sh 'docker rmi $REPOSITORY_URI:$IMAGE_TAG'
-            }
-        }
-    }
 }
