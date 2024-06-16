@@ -50,7 +50,9 @@ pipeline {
 
     post {
         always {
-            sh 'docker rmi $REPOSITORY_URI:$IMAGE_TAG'
+            script {
+                sh 'docker rmi $REPOSITORY_URI:$IMAGE_TAG'
+            }
         }
     }
 }
