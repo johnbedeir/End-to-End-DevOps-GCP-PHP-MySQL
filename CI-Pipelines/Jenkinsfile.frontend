@@ -35,18 +35,9 @@ pipeline {
 
         stage('Login to GCR') {
             steps {
-                script {
-                    try {
-                        echo "Logging in to Google Container Registry"
-                        withCredentials([file(credentialsId: 'gcp-key-file', variable: 'GCP_KEY_FILE')]) {
-                            sh 'gcloud auth activate-service-account --key-file=$GCP_KEY_FILE'
-                            sh 'gcloud auth configure-docker'
-                        }
-                        echo "Logged in to Google Container Registry successfully."
-                    } catch (Exception e) {
-                        echo "Error during 'Login to GCR' stage: ${e.getMessage()}"
-                        throw e
-                    }
+                withCredentials([file(credentialsId: 'gcp-key-file', variable: 'GCP_KEY_FILE')]) {
+                    sh 'gcloud auth activate-service-account --key-file=$GCP_KEY_FILE'
+                    sh 'gcloud auth configure-docker'
                 }
             }
         }
