@@ -5,20 +5,13 @@ variable "kube_monitoring_stack_values" {
       adminUser: admin
       adminPassword: admin
       enabled: true
-      service:
-        type: ClusterIP
       ingress:
         enabled: true
         ingressClassName: nginx
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
         hosts:
           - grafana.johnydev.com
-        paths: ["/"]
-        tls:
-          - secretName: grafana-tls
-            hosts:
-              - grafana.johnydev.com
       resources:
         requests:
           cpu: "100m"
@@ -35,20 +28,13 @@ variable "kube_monitoring_stack_values" {
         clusterPeers:  
           - kube-prometheus-stack-alertmanager.alertmanager.monitoring.svc:9093
       enabled: true
-      service:
-        type: ClusterIP
       ingress:
         enabled: true
         ingressClassName: nginx
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
         hosts:
           - alertmanager.johnydev.com
-        tls:
-          - secretName: alertmanager-tls
-            hosts:
-              - alertmanager.johnydev.com
-        paths: ["/"]
       resources:
         requests:
           cpu: "100m"
@@ -62,16 +48,10 @@ variable "kube_monitoring_stack_values" {
         enabled: true
         ingressClassName: nginx
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+          nginx.ingress.kubernetes.io/ssl-redirect: "false"
         hosts:
           - prometheus.johnydev.com
-        paths: ["/"]
-        tls:
-          - secretName: prometheus-tls
-            hosts:
-              - prometheus.johnydev.com
-      service:
-        type: ClusterIP
+
       prometheusSpec:
         replicas: 2
         replicaExternalLabelName: prometheus_replica
