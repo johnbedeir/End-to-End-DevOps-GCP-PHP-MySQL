@@ -41,5 +41,3 @@ variable "gke_service_account_email" {
   description = "The email of the service account to grant Cloud SQL client role"
   type        = string
 }
-
-

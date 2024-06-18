@@ -1,11 +1,10 @@
-output "public_ip" {
-  value       = google_sql_database_instance.instance.public_ip_address
-  description = "The public IP address of the Cloud SQL instance"
-}
-
 output "cloud_sql_name" {
   value       = google_sql_database_instance.instance.name
   description = "The name of the Cloud SQL instance"
+}
+
+output "cloudsql_public_ip" {
+  value = google_sql_database_instance.instance.public_ip_address
 }
 
 output "cluster_name" {
@@ -25,8 +24,4 @@ output "db_username" {
 
 output "cluster_zone" {
   value = google_container_cluster.primary.location
-}
-
-output "cloudsql_public_ip" {
-  value = google_sql_database_instance.instance.public_ip_address
 }
