@@ -27,13 +27,14 @@ dbsecretusername="db-username"
 cloudsql_endpoint="sql-endpoint"
 #  K8s
 app_namespace="tms-app"
-ingress_namespace="ingress-nginx"
-ingress_service_name="ingress-nginx-controller"
-ingress_deployment="https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml"
 monitoring_namespace="monitoring"
 alertmanager_svc="kube-prometheus-stack-alertmanager"
 prometheus_svc="kube-prometheus-stack-prometheus"
 grafana_svc="kube-prometheus-stack-grafana"
+jenkins_svc="jenkins"
+jenkins_namespace="jenkins"
+argo_svc="argocd-server"
+argo_namespace="argocd"
 # Terraform
 cd terraform
 cloudsql_public_ip="$(terraform output -raw cloudsql_public_ip)"
@@ -140,10 +141,14 @@ sleep 90s
 echo ""
 echo "Cloud_SQL: " ${cloudsql_public_ip}
 echo ""
-echo "App_URL:" $(kubectl get svc -n ${ingress_namespace} ${ingress_service_name} -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
+# echo "App_URL:" $(kubectl get svc ${alertmanager_svc} -n ${app_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "Alertmanager_URL:" $(kubectl get svc ${alertmanager_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "Prometheus_URL:" $(kubectl get svc ${prometheus_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "Grafana_URL: " $(kubectl get svc ${grafana_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
+echo ""
+echo "Jenkins_URL: " $(kubectl get svc ${jenkins_svc} -n ${jenkins_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
+echo ""
+echo "ArgoCD_URL: " $(kubectl get svc ${argo_svc} -n ${argo_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
