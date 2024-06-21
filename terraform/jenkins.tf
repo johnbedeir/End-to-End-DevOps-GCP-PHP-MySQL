@@ -1,36 +1,35 @@
 variable "jenkins_values" {
   type    = string
   default = <<EOF
-    controller:
-      service:
-        type: LoadBalancer
-      jenkinsHome: "/var/jenkins_home"
-      admin:
-        username: admin
-        password: admin
-      installPlugins:
-        - kubernetes:1.29.7
-        - workflow-aggregator:2.6
-        - git:4.7.2
-        - google-oauth-plugin:1.330.vf5e86021cb_ec
-      securityRealm:
-        local:
-          allowsSignup: false
-      authorizationStrategy: loggedInUsersCanDoAnything
-      volumes:
-        - name: gcp-key
-          secret:
-            secretName: gcp-key
-      volumeMounts:
-        - name: gcp-key
-          mountPath: gcp-credentials.json
-          readOnly: true
-  persistence:
-    enabled: true
-    storageClass: "standard"
-    accessMode: "ReadWriteOnce"
-    size: "8Gi"
-    EOF
+controller:
+  service:
+    type: LoadBalancer
+  jenkinsHome: "/var/jenkins_home"
+  admin:
+    username: admin
+    password: admin
+  installPlugins:
+    - kubernetes:1.29.7
+    - workflow-aggregator:2.6
+    - git:4.7.2
+    - google-oauth-plugin:1.330.vf5e86021cb_ec
+  securityRealm:
+    local:
+      allowsSignup: false
+  volumes:
+    - name: gcp-key
+      secret:
+        secretName: gcp-key
+  volumeMounts:
+    - name: gcp-key
+      mountPath: gcp-credentials.json
+      readOnly: true
+persistence:
+  enabled: true
+  storageClass: "standard"
+  accessMode: "ReadWriteOnce"
+  size: "8Gi"
+EOF
 }
 
 resource "helm_release" "jenkins" {
