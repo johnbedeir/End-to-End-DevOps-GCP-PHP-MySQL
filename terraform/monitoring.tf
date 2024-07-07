@@ -5,13 +5,8 @@ variable "kube_monitoring_stack_values" {
       adminUser: admin
       adminPassword: admin
       enabled: true
-      ingress:
-        enabled: true
-        ingressClassName: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/ssl-redirect: "false"
-        hosts:
-          - grafana.johnydev.com
+      service:
+        type: LoadBalancer
       resources:
         requests:
           cpu: "100m"
@@ -28,13 +23,8 @@ variable "kube_monitoring_stack_values" {
         clusterPeers:  
           - kube-prometheus-stack-alertmanager.alertmanager.monitoring.svc:9093
       enabled: true
-      ingress:
-        enabled: true
-        ingressClassName: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/ssl-redirect: "false"
-        hosts:
-          - alertmanager.johnydev.com
+      service:
+        type: LoadBalancer
       resources:
         requests:
           cpu: "100m"
@@ -44,13 +34,8 @@ variable "kube_monitoring_stack_values" {
           memory: "200Mi"
 
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: nginx
-        annotations:
-          nginx.ingress.kubernetes.io/ssl-redirect: "false"
-        hosts:
-          - prometheus.johnydev.com
+      service:
+        type: LoadBalancer
 
       prometheusSpec:
         replicas: 2
@@ -121,7 +106,7 @@ resource "helm_release" "kube_monitoring_stack" {
   repository       = "https://prometheus-community.github.io/helm-charts"
   chart            = "kube-prometheus-stack"
   namespace        = "monitoring"
-  version          = "45.29.0"
+  version          = "60.3.0"
   create_namespace = true
   values           = [var.kube_monitoring_stack_values]
 }

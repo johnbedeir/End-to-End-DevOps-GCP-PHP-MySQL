@@ -36,7 +36,7 @@ resource "helm_release" "jenkins" {
   name             = "jenkins"
   repository       = "https://charts.jenkins.io"
   chart            = "jenkins"
-  version          = "5.1.30"
+  version          = "5.3.1"
   cleanup_on_fail  = true
   namespace        = "jenkins"
   create_namespace = true
