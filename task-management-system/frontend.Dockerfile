@@ -12,8 +12,7 @@ COPY css /var/www/html/css/
 COPY js /var/www/html/js/
 COPY index.php /var/www/html
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer init
+RUN composer init --name="vendor/package" --description="A short description" --author="Author Name <author@example.com>" --type="project" --license="MIT" --require="php:^8.2" --no-interaction
 
 COPY composer.json composer.lock* /var/www/html/
 
@@ -31,6 +30,8 @@ RUN apt-get update && apt-get install -y\
     && docker-php-ext-install mysqli \
     && docker-php-ext-install zip \
     && docker-php-source delete
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
