@@ -11,6 +11,9 @@ WORKDIR /var/www/html
 COPY css /var/www/html/css/
 COPY js /var/www/html/js/
 COPY index.php /var/www/html
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 COPY composer.json composer.lock* /var/www/html/
 
 RUN apt-get update && apt-get install -y\
@@ -27,10 +30,6 @@ RUN apt-get update && apt-get install -y\
     && docker-php-ext-install mysqli \
     && docker-php-ext-install zip \
     && docker-php-source delete
-
-RUN curl -sS https://getcomposer.org/installer | php 
-
-RUN mv composer.phar /usr/local/bin/composer
 
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
