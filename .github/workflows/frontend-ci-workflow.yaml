@@ -25,5 +25,5 @@ jobs:
         env:
           IMAGE_TAG: latest
         run: |
-          docker build -f frontend.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.FRONTEND_GCR }}:$IMAGE_TAG task-management-system/
+          docker build -f task-management-system/frontend.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.FRONTEND_GCR }}:$IMAGE_TAG task-management-system/
           docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.FRONTEND_GCR }}:$IMAGE_TAG

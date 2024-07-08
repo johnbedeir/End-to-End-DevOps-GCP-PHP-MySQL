@@ -25,5 +25,5 @@ jobs:
         env:
           IMAGE_TAG: latest
         run: |
-          docker build -f mysql.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.MYSQL_JOB_GCR }}:$IMAGE_TAG k8s/mysql-job/
+          docker build -f k8s/mysql-job/mysql.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.MYSQL_JOB_GCR }}:$IMAGE_TAG k8s/mysql-job/
           docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.MYSQL_JOB_GCR }}:$IMAGE_TAG
