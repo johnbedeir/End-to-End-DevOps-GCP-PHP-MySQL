@@ -25,5 +25,5 @@ jobs:
         env:
           IMAGE_TAG: latest
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.LOGOUT_GCR }}:$IMAGE_TAG .
+          docker build -f logout.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.LOGOUT_GCR }}:$IMAGE_TAG task-management-system/
           docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.LOGOUT_GCR }}:$IMAGE_TAG

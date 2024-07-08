@@ -3,15 +3,17 @@
 # Set your GitHub repo details
 owner="johnbedeir"
 repo="End-to-End-DevOps-GCP-Python-MySQL"
-app_repo_name="todo-app-img"
-db_repo_name="todo-db-img"
+frontend_repo_name="tms-frontend-img"
+users_repo_name="tms-users-img"
+logout_repo_name="tms-logout-img"
+sql_job_repo_name="tms-mysql-job-img"
 cluster_name="cluster-1-testing-env"
 project_id="johnydev"
 service_account_email="terraform-sa@${project_id}.iam.gserviceaccount.com"
 key_ids=$(gcloud iam service-accounts keys list --iam-account=$service_account_email --format="value(name)")
 filename="gcp-credentials.json"
 cd terraform &&
-zone="$(terraform output -json | jq -r .cluster_zone.value)"
+zone="$(terraform output -raw cluster_zone)"
 cd ..
 
 
@@ -32,7 +34,7 @@ done
 # Get GCP credentials
 gcloud iam service-accounts keys create ${filename} --iam-account ${service_account_email}
 
-gcp_credentials=$(base64 ${filename})
+gcp_credentials=$(base64 -i ${filename})
 
 # Function to create or update GitHub secret
 create_secret() {
@@ -55,8 +57,10 @@ create_secret "GCP_CREDENTIALS" "${gcp_credentials}"
 create_secret "GCP_PROJECT" "${project_id}"
 create_secret "CLUSTER_NAME" "${cluster_name}" 
 create_secret "ZONE" "${zone}" 
-create_secret "APP_GCR_REPOSITORY" "${app_repo_name}"
-create_secret "JOB_GCR_REPOSITORY" "${db_repo_name}"
+create_secret "FRONTEND_GCR" "${frontend_repo_name}"
+create_secret "USERS_GCR" "${users_repo_name}"
+create_secret "LOGOUT_GCR" "${logout_repo_name}"
+create_secret "MYSQL_JOB_GCR" "${sql_job_repo_name}"
 
 # Cleanup
 echo "cleaning up gcp credentials..."

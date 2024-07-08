@@ -39,7 +39,7 @@ argo_namespace="argocd"
 cd terraform
 cloudsql_public_ip="$(terraform output -raw cloudsql_public_ip)"
 cloudsecretname="$(terraform output -raw cloud_sql_name)"
-zone=$(terraform output -raw cluster_zone)
+zone="$(terraform output -raw cluster_zone)"
 cluster_name="$(terraform output -raw cluster_name)"
 dbendpoint="$(terraform output -raw public_ip)"
 dbusername="$(terraform output -raw db_username)"
@@ -148,7 +148,5 @@ echo ""
 echo "Prometheus_URL:" $(kubectl get svc ${prometheus_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "Grafana_URL: " $(kubectl get svc ${grafana_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
-echo ""
-echo "Jenkins_URL: " $(kubectl get svc ${jenkins_svc} -n ${jenkins_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "ArgoCD_URL: " $(kubectl get svc ${argo_svc} -n ${argo_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
