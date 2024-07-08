@@ -32,7 +32,9 @@ RUN apt-get update && apt-get install -y\
     && docker-php-ext-install zip \
     && docker-php-source delete
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php 
+
+RUN mv composer.phar /usr/local/bin/composer
 
 RUN chown -R www-data:www-data /var/www/html \
     && a2enmod rewrite
