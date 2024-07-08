@@ -13,6 +13,7 @@ COPY js /var/www/html/js/
 COPY pages/logout.php /var/www/html/pages/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer init
 
 COPY composer.json composer.lock* /var/www/html/
 
