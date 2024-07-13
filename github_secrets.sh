@@ -12,7 +12,7 @@ project_id="johnydev"
 service_account_email="terraform-sa@${project_id}.iam.gserviceaccount.com"
 key_ids=$(gcloud iam service-accounts keys list --iam-account=$service_account_email --format="value(name)")
 filename="gcp-credentials.json"
-envfilename=".env"
+envfilename="env-example"
 cd terraform &&
 zone="$(terraform output -raw cluster_zone)"
 cd ..
