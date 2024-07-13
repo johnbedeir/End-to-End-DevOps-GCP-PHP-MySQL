@@ -35,13 +35,16 @@ jenkins_svc="jenkins"
 jenkins_namespace="jenkins"
 argo_svc="argocd-server"
 argo_namespace="argocd"
+ingress_svc="nginx-ingress-ingress-nginx-controller"
+ingress_namespace="ingress-nginx"
+# End Variables
 # Terraform
 cd terraform
 cloudsql_public_ip="$(terraform output -raw cloudsql_public_ip)"
 cloudsecretname="$(terraform output -raw cloud_sql_name)"
 zone="$(terraform output -raw cluster_zone)"
 cluster_name="$(terraform output -raw cluster_name)"
-dbendpoint="$(terraform output -raw public_ip)"
+dbendpoint="$(terraform output -raw cloudsql_public_ip)"
 dbusername="$(terraform output -raw db_username)"
 cd ..
 # End Variables
@@ -118,7 +121,6 @@ docker push ${sql_job_image_name}
 # create app_namespace
 echo "--------------------creating Namespace--------------------"
 kubectl create ns ${app_namespace} || true
-kubectl create ns ${ingress_namespace} || true
 
 # Store the generated password in k8s secrets
 echo "--------------------Store the generated password in k8s secret--------------------"
@@ -141,7 +143,7 @@ sleep 90s
 echo ""
 echo "Cloud_SQL: " ${cloudsql_public_ip}
 echo ""
-# echo "App_URL:" $(kubectl get svc ${alertmanager_svc} -n ${app_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
+echo "App_URL:" $(kubectl get svc ${ingress_svc} -n ${ingress_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
 echo "Alertmanager_URL:" $(kubectl get svc ${alertmanager_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
