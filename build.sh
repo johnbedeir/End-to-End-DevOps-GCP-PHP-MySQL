@@ -39,7 +39,7 @@ argo_namespace="argocd"
 cd terraform
 cloudsql_public_ip="$(terraform output -raw cloudsql_public_ip)"
 cloudsecretname="$(terraform output -raw cloud_sql_name)"
-zone=$(terraform output -raw cluster_zone)
+zone="$(terraform output -raw cluster_zone)"
 cluster_name="$(terraform output -raw cluster_name)"
 dbendpoint="$(terraform output -raw public_ip)"
 dbusername="$(terraform output -raw db_username)"
@@ -80,7 +80,7 @@ cd ..
 
 # Wait before updating kubeconfig
 echo "--------------------Wait before updating kubeconfig--------------------"
-sleep 40s
+sleep 60s
 
 # Update kubeconfig
 echo "--------------------Update Kubeconfig--------------------"
