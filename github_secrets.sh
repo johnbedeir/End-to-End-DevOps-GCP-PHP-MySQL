@@ -12,6 +12,7 @@ project_id="johnydev"
 service_account_email="terraform-sa@${project_id}.iam.gserviceaccount.com"
 key_ids=$(gcloud iam service-accounts keys list --iam-account=$service_account_email --format="value(name)")
 filename="gcp-credentials.json"
+envfilename=".env"
 cd terraform &&
 zone="$(terraform output -raw cluster_zone)"
 cd ..
@@ -35,6 +36,8 @@ done
 gcloud iam service-accounts keys create ${filename} --iam-account ${service_account_email}
 
 gcp_credentials=$(base64 -i ${filename})
+
+env=$(base64 -i ${envfilename})
 
 # Function to create or update GitHub secret
 create_secret() {
@@ -61,6 +64,7 @@ create_secret "FRONTEND_GCR" "${frontend_repo_name}"
 create_secret "USERS_GCR" "${users_repo_name}"
 create_secret "LOGOUT_GCR" "${logout_repo_name}"
 create_secret "MYSQL_JOB_GCR" "${sql_job_repo_name}"
+create_secret "ENV" "${env}"
 
 # Cleanup
 echo "cleaning up gcp credentials..."
