@@ -1,17 +1,17 @@
-name: Continuous Deployment
+name: Ingress CD Workflow
 
 on:
   push:
     branches:
       - main
-      
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     # Check if the CI workflow was successful
     if: github.event.workflow_run.conclusion == 'success'
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v1
         with:
-          version: 'latest'
+          version: "latest"
 
       - name: Install Google Cloud SDK and gke-gcloud-auth-plugin
         run: |
