@@ -21,6 +21,9 @@ jobs:
       - name: Configure Docker for Google Cloud
         run: gcloud auth configure-docker
 
+      - name: Set up environment file
+        run: echo "${{ secrets.ENV_FILE }}" > .env
+
       - name: Build, tag, and push image to Google Container Registry
         env:
           IMAGE_TAG: latest
