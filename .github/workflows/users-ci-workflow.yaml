@@ -22,7 +22,7 @@ jobs:
         run: gcloud auth configure-docker
 
       - name: Set up environment file
-        run: echo "${{ secrets.ENV_FILE }}" > .env
+        run: echo "${{ secrets.ENV }}" > .env
 
       - name: Build, tag, and push image to Google Container Registry
         env:
