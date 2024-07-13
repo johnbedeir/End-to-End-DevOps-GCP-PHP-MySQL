@@ -1,0 +1,29 @@
+name: MySQL Job CI Workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Configure Docker for Google Cloud
+        run: gcloud auth configure-docker
+
+      - name: Build, tag, and push image to Google Container Registry
+        env:
+          IMAGE_TAG: latest
+        run: |
+          docker build -f k8s/mysql-job/mysql.Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.MYSQL_JOB_GCR }}:$IMAGE_TAG k8s/mysql-job/
+          docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.MYSQL_JOB_GCR }}:$IMAGE_TAG

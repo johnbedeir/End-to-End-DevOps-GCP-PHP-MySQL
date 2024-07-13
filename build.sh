@@ -149,6 +149,4 @@ echo "Prometheus_URL:" $(kubectl get svc ${prometheus_svc} -n ${monitoring_names
 echo ""
 echo "Grafana_URL: " $(kubectl get svc ${grafana_svc} -n ${monitoring_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
 echo ""
-echo "Jenkins_URL: " $(kubectl get svc ${jenkins_svc} -n ${jenkins_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
-echo ""
 echo "ArgoCD_URL: " $(kubectl get svc ${argo_svc} -n ${argo_namespace} -o jsonpath='{.status.loadBalancer.ingress[0].ip}:{.spec.ports[0].port}')
