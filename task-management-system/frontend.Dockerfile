@@ -11,10 +11,7 @@ WORKDIR /var/www/html
 COPY css /var/www/html/css/
 COPY js /var/www/html/js/
 COPY index.php /var/www/html
-
-RUN composer init --name="vendor/package" --description="A short description" --author="Author Name <author@example.com>" --type="project" --license="MIT" --require="php:^8.2" --no-interaction
-
-COPY composer.json composer.lock* /var/www/html/
+COPY composer.json composer.lock /var/www/html/
 
 RUN apt-get update && apt-get install -y\
     libpng-dev \

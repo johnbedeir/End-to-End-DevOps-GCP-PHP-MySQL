@@ -1,0 +1,15 @@
+{
+    "name": "johnydev/task-management-system",
+    "autoload": {
+        "psr-4": {
+            "Johnydev\\TaskManagementSystem\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "johnbedeir",
+            "email": "john.bedeir@gmail.com"
+        }
+    ],
+    "require": {}
+}
