@@ -85,6 +85,10 @@ cd ..
 echo "--------------------Wait before updating kubeconfig--------------------"
 sleep 60s
 
+# Get GCP credentials
+echo "--------------------Get Credentials--------------------"
+gcloud iam service-accounts keys create ${filename} --iam-account ${service_account_email}
+
 # Update kubeconfig
 echo "--------------------Update Kubeconfig--------------------"
 gcloud container clusters get-credentials ${cluster_name} --zone ${zone} --project ${project_id}
