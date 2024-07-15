@@ -37,7 +37,6 @@ argo_svc="argocd-server"
 argo_namespace="argocd"
 ingress_svc="nginx-ingress-ingress-nginx-controller"
 ingress_namespace="ingress-nginx"
-# End Variables
 # Terraform
 cd terraform
 cloudsql_public_ip="$(terraform output -raw cloudsql_public_ip)"
