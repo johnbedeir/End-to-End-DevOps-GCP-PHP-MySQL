@@ -120,3 +120,51 @@ To clean up all resources, run the `destroy.sh` script:
 ```sh
 ./destroy.sh
 ```
+
+### Accessing the Application and Monitoring Tools
+
+#### Application Access
+
+After running the `build.sh` script, you can access the Task Management System application by navigating to the IP address provided in the output:
+
+**APP_URL**: `<Your_APP_URL>`
+
+<img src=app.png>
+
+#### Grafana Access
+
+To access Grafana, navigate to the URL provided in the output:
+
+**Grafana_URL**: `<Your_Grafana_URL>`
+
+1. **Login**: Use the default username and password:
+   - Username: `admin`
+   - Password: `admin`
+2. **Change Password**: You will be prompted to create a new password or you can skip this step.
+3. **Navigate to Dashboard**: From the upper left corner, click on the Grafana icon and select "Dashboards".
+4. **Select a Dashboard**: Choose the preferred dashboard, for example, the Kubernetes/Kubelet Dashboard.
+
+<img src=grafana.png>
+
+#### ArgoCD Access
+
+To access ArgoCD, navigate to the URL provided in the output:
+
+**ArgoCD_URL**: `<Your_ArgoCD_URL>`
+
+1. **Login**: Use the default username:
+   - Username: `admin`
+2. **Find the Password**: The password is stored in a Kubernetes secret called `argocd-initial-admin-secret`.
+
+   **How to retrieve the ArgoCD password:**
+   a. Open K9s in your terminal.
+   b. Press `Ctrl+A` to navigate to the main menu.
+   c. Press `/` to start a search.
+   d. Type `secrets` to search for secrets.
+   e. Look for the `argocd-initial-admin-secret`.
+   f. Press `X` to decode the secret and retrieve the password.
+
+3. **Login to ArgoCD**: Use the decoded password to log in.
+4. **Add Applications**: Add each service as an application in ArgoCD using the GitHub Repository HTTP URL.
+
+<img src=argo-cd.png>
