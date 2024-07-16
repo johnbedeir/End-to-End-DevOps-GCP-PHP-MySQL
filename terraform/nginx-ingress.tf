@@ -48,5 +48,5 @@ resource "helm_release" "nginx_ingress" {
   cleanup_on_fail  = true
   namespace        = "ingress-nginx"
   create_namespace = true
-  values = [var.nginx_ingress_values]
+  values           = [var.nginx_ingress_values]
 }
